@@ -6,11 +6,44 @@
 
 void printWelcome();
 int checkLogin();
+int showMenu();
 
 int main() {
     printWelcome();
 
     int login = checkLogin();
+
+    menu:
+    if(login == 1){
+        int menu = showMenu();
+        switch(menu){
+			case '1':
+
+				break;
+			case '2':
+
+				break;
+			case '3':
+
+				break;
+			case '4':
+
+				break;
+			case '5':
+
+				break;
+			case '6':
+
+			    break;
+            default:
+                printf("\n\n\n\n\n\n\t\t\t\t\t    Incorrect Input");
+                printf("\n\n\n\t\t\t\t\t      Enter again");
+                sleep(1);
+                system("cls");
+                goto menu;
+
+        }
+    }
 
     return 0;
 }
@@ -60,5 +93,26 @@ int checkLogin() {
         system("cls");
         return 1;
     }
+}
+
+int showMenu() {
+    int num;
+    printf("____________________________________________-|MAIN MENU|-___________________________________________\n\n");
+    printf("\t\t\t\t _-Please enter your choice for menu-_\n\n");
+    printf("\n\t\t\t\t\t Enter 1 -> Book a room");
+    printf("\n\t\t\t\t\t------------------------");
+    printf("\n\t\t\t\t     Enter 2 -> View Customers List");
+    printf("\n\t\t\t\t    --------------------------------");
+    printf("\n\t\t\t       Enter 3 -> Delete a Customer From the List");
+    printf("\n\t\t\t      --------------------------------------------");
+    printf("\n\t\t\t       Enter 4 -> Search a Customer From the List");
+    printf("\n\t\t\t      --------------------------------------------");
+    printf("\n\t\t\t\t    Enter 5 -> Edit a Customer's Data");
+    printf("\n\t\t\t\t   -----------------------------------");
+    printf("\n\t\t\t\t\t     Enter 6 -> Exit");
+    printf("\n\t\t\t\t\t    -----------------\n\t\t\t\t\t\t     ");
+    num = getch();
+    system("cls");
+    return num;
 }
 
