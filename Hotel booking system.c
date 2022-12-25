@@ -1,11 +1,16 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <conio.h>
 #include <unistd.h>
 
 void printWelcome();
+int checkLogin();
 
 int main() {
     printWelcome();
+
+    int login = checkLogin();
 
     return 0;
 }
@@ -23,3 +28,37 @@ void printWelcome() {
 	sleep(2);
     system("cls");
 }
+
+int checkLogin() {
+    int i;
+    char name[100], pass[50], c;
+    jump:
+    printf("\n\t\t\t\t      _____- Enter Username -_____\n\n\t\t\t\t\t\t");
+    gets(name);
+    printf("\n\t\t\t\t       _____-Enter Password-_____\n\n\t\t\t\t\t\t");
+    gets(pass);
+
+    if(strcmp(name,"user") != 0 && strcmp(pass,"pass") != 0) {
+        printf("\n\n\n\t\t\t\t   !!Incorrect Username and Password!!\n\n\n");
+        printf("\n\t\t\t\t      Press any key to enter again\n\n\t\t\t\t\t\t   ");
+        getch();
+        system("cls");
+        goto jump;
+    }else if(strcmp(name,"user") != 0 && strcmp(pass,"pass") == 0) {
+        printf("\n\n\n\t\t\t\t\t !!Incorrect Username!!\n\n\n");
+        printf("\n\t\t\t\t      Press any key to enter again\n\n\t\t\t\t\t\t   ");
+        getch();
+        system("cls");
+        goto jump;
+    }else if((strcmp(name,"user") == 0 && strcmp(pass,"pass") != 0)) {
+        printf("\n\n\n\t\t\t\t\t !!Incorrect Password!!\n\n\n");
+        printf("\n\t\t\t\t      Press any key to enter again\n\n\t\t\t\t\t\t   ");
+        getch();
+        system("cls");
+        goto jump;
+    }else {
+        system("cls");
+        return 1;
+    }
+}
+
