@@ -9,6 +9,8 @@ void checkLogin();
 void showMenu();
 void addCustomer();
 void viewRecord();
+void searchCustomer();
+
 
 struct customer_details {
     char room_type[20];
@@ -43,7 +45,7 @@ int main() {
 
                 break;
             case '4':
-
+                searchCustomer();
                 break;
             case '5':
 
@@ -110,7 +112,7 @@ void checkLogin() {
 
 void showMenu() {
     printf("____________________________________________-|MAIN MENU|-___________________________________________\n\n");
-    printf("\t\t\t\t _-Please enter your choice for menu-_\n\n");
+    printf("\t\t\t\t_-|Please enter your choice for menu|-_\n\n");
     printf("\n\t\t\t\t\t Enter 1 -> Book a room");
     printf("\n\t\t\t\t\t------------------------");
     printf("\n\t\t\t\t     Enter 2 -> View Customers Record");
@@ -191,10 +193,10 @@ void viewRecord() {
         printf("\n\n\n\n\n\n\n\n\t\t\t\t   !!Sorry, something went wrong!!");
         sleep(1);
         system("cls");
+        showMenu();
     }
-    system("cls");
     int i = 1;
-    while(fread(&serial, sizeof(serial), 1, f) ==1) {
+    while(fread(&serial, sizeof(serial), 1, f) == 1) {
         printf("\n\t\t\t\t\t_-|Customer %d data|-_\n\n",i);
         printf("\n Room type(AC/NON-AC): %s", serial.room_type);
 		printf("\n----------------------");
@@ -218,4 +220,53 @@ void viewRecord() {
     getch();
     system("cls");
     showMenu();
+}
+
+void searchCustomer() {
+    FILE *f;
+    char roomnumber[10];
+    int foundCustomar = 0;
+
+    f = fopen("customerData.txt","r+");
+    if(f == NULL) {
+        printf("\n\n\n\n\n\n\n\n\t\t\t\t   !!Sorry, something went wrong!!");
+        sleep(1);
+        system("cls");
+        showMenu();
+    }
+    printf("\n\t\t\t\tEnter room number of the coustomer");
+    printf("\n\t\t\t\t----------------------------------\n\t\t\t\t\t       ");
+    scanf("%s", &roomnumber);
+    system("cls");
+
+    while(fread(&serial, sizeof(serial), 1, f) == 1) {
+        if(strcmp(serial.room_no, roomnumber)==0){
+            printf("\n\t\t\t\t _-|Searched Customer's details|-_\n");
+            printf("\n Room type(AC/NON-AC): %s", serial.room_type);
+            printf("\n----------------------");
+            printf("\n Room number: %s", serial.room_no);
+            printf("\n-------------");
+            printf("\n Name: %s", serial.name);
+            printf("\n------");
+            printf("\n Address: %s", serial.address);
+            printf("\n---------");
+            printf("\n Phone Number: %s", serial.phn_no);
+            printf("\n--------------");
+            printf("\n Email: %s", serial.email);
+            printf("\n-------");
+            printf("\n Period: %s", serial.period);
+            printf("\n--------");
+            printf("\n Arrival date: %s", serial.arrival_date);
+            printf("\n--------------");
+            foundCustomar = 1;
+            break;
+        }
+    }
+    if(foundCustomar == 0) {
+		printf("\n\n\n\n\n\n\n\n\t\t\t\t   !!Searched Customer is not found!!");
+        printf("\n\n\n\n\t\t\t\t    Enter any key to go back to manu\n\t\t\t\t\t\t   ");
+	}
+	getch();
+	system("cls");
+	showMenu();
 }
