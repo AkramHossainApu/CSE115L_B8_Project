@@ -7,6 +7,7 @@
 void printWelcome();
 int checkLogin();
 int showMenu();
+void addCustomer();
 
 struct customer_details {
     char room_type[20];
@@ -29,7 +30,7 @@ int main() {
         int menu = showMenu();
         switch(menu){
 			case '1':
-
+                addCustomer();
 				break;
 			case '2':
 
@@ -112,11 +113,11 @@ int showMenu() {
     printf("\t\t\t\t _-Please enter your choice for menu-_\n\n");
     printf("\n\t\t\t\t\t Enter 1 -> Book a room");
     printf("\n\t\t\t\t\t------------------------");
-    printf("\n\t\t\t\t     Enter 2 -> View Customers List");
+    printf("\n\t\t\t\t     Enter 2 -> View Customers Record");
     printf("\n\t\t\t\t    --------------------------------");
-    printf("\n\t\t\t       Enter 3 -> Delete a Customer From the List");
+    printf("\n\t\t\t       Enter 3 -> Delete a Customer From the Record");
     printf("\n\t\t\t      --------------------------------------------");
-    printf("\n\t\t\t       Enter 4 -> Search a Customer From the List");
+    printf("\n\t\t\t       Enter 4 -> Search a Customer From the Record");
     printf("\n\t\t\t      --------------------------------------------");
     printf("\n\t\t\t\t    Enter 5 -> Edit a Customer's Data");
     printf("\n\t\t\t\t   -----------------------------------");
@@ -125,5 +126,63 @@ int showMenu() {
     num = getch();
     system("cls");
     return num;
+}
+
+void addCustomer() {
+	FILE *fp;
+	fp = fopen("customerData.txt","a+");
+	if(fp == NULL) {
+		printf("\n\n\n\n\n\n\n\n\t\t\t\t     !!Sorry,Something went wrong!!");
+		sleep(1);
+		system("cls");
+		showMenu();
+	}
+	while(1)
+	{
+		printf("\n\t\t\t\t\t.----------------------.");
+		printf("\n\t\t\t\t\t|Enter Customer Details|");
+		printf("\n\t\t\t\t\t'----------------------'\n");
+		printf("\n Enter Room type(AC/NON-AC):");
+		gets(serial.room_type);
+		fflush(stdin);
+		printf("----------------------------");
+		printf("\n Enter Room number:");
+		gets(serial.room_no);
+		fflush(stdin);
+		printf("-------------------");
+		printf("\n Enter Name:");
+		gets(serial.name);
+		fflush(stdin);
+		printf("------------");
+		printf("\n Enter Address:");
+		gets(serial.address);
+		fflush(stdin);
+		printf("---------------");
+		printf("\n Enter Phone Number:");
+		gets(serial.phn_no);
+		fflush(stdin);
+		printf("--------------------");
+		printf("\n Enter Email:");
+		gets(serial.email);
+		fflush(stdin);
+		printf("-------------");
+		printf("\nEnter Period('x'days):");
+		gets(serial.period);
+		fflush(stdin);
+		printf("----------------------");
+		printf("\n Enter Arrival date(dd\\mm\\yyyy):");
+		gets(serial.arrival_date);
+		fflush(stdin);
+		printf("----------------------------------");
+
+		fwrite(&serial, sizeof(serial), 1, fp);
+		fflush(stdin);
+		printf("\n\n\t\t\t\t   !!Your Room is successfully booked!!");
+        break;
+	}
+	fclose(fp);
+	getch();
+	system("cls");
+	showMenu();
 }
 
