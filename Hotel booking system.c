@@ -8,6 +8,17 @@ void printWelcome();
 int checkLogin();
 int showMenu();
 
+struct customer_details {
+    char room_type[20];
+    char room_no[10];
+    char name[50];
+    char address[50];
+    char phn_no[15];
+    char email[30];
+    char period[5];
+    char arrival_date[10];
+}serial;
+
 int main() {
     printWelcome();
 
