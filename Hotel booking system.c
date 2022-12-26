@@ -5,9 +5,10 @@
 #include <unistd.h>
 
 void printWelcome();
-int checkLogin();
-int showMenu();
+void checkLogin();
+void showMenu();
 void addCustomer();
+void viewRecord();
 
 struct customer_details {
     char room_type[20];
@@ -21,42 +22,43 @@ struct customer_details {
 }serial;
 
 int main() {
+    int menu;
     printWelcome();
 
-    int login = checkLogin();
+    checkLogin();
 
     menu:
-    if(login == 1){
-        int menu = showMenu();
+    showMenu();
+    while(1) {
+        menu = getch();
+        system("cls");
         switch(menu){
-			case '1':
+            case '1':
                 addCustomer();
-				break;
-			case '2':
+                break;
+            case '2':
+                viewRecord();
+                break;
+            case '3':
 
-				break;
-			case '3':
+                break;
+            case '4':
 
-				break;
-			case '4':
+                break;
+            case '5':
 
-				break;
-			case '5':
+                break;
+            case '6':
 
-				break;
-			case '6':
-
-			    break;
+                break;
             default:
                 printf("\n\n\n\n\n\n\t\t\t\t\t    Incorrect Input");
                 printf("\n\n\n\t\t\t\t\t      Enter again");
                 sleep(1);
                 system("cls");
                 goto menu;
-
         }
     }
-
     return 0;
 }
 
@@ -74,7 +76,7 @@ void printWelcome() {
     system("cls");
 }
 
-int checkLogin() {
+void checkLogin() {
     int i;
     char name[100], pass[50], c;
     jump:
@@ -103,12 +105,10 @@ int checkLogin() {
         goto jump;
     }else {
         system("cls");
-        return 1;
     }
 }
 
-int showMenu() {
-    int num;
+void showMenu() {
     printf("____________________________________________-|MAIN MENU|-___________________________________________\n\n");
     printf("\t\t\t\t _-Please enter your choice for menu-_\n\n");
     printf("\n\t\t\t\t\t Enter 1 -> Book a room");
@@ -123,13 +123,11 @@ int showMenu() {
     printf("\n\t\t\t\t   -----------------------------------");
     printf("\n\t\t\t\t\t     Enter 6 -> Exit");
     printf("\n\t\t\t\t\t    -----------------\n\t\t\t\t\t\t     ");
-    num = getch();
-    system("cls");
-    return num;
 }
 
 void addCustomer() {
 	FILE *fp;
+	char test;
 	fp = fopen("customerData.txt","a+");
 	if(fp == NULL) {
 		printf("\n\n\n\n\n\n\n\n\t\t\t\t     !!Sorry,Something went wrong!!");
@@ -137,8 +135,7 @@ void addCustomer() {
 		system("cls");
 		showMenu();
 	}
-	while(1)
-	{
+	while(1) {
 		printf("\n\t\t\t\t\t.----------------------.");
 		printf("\n\t\t\t\t\t|Enter Customer Details|");
 		printf("\n\t\t\t\t\t'----------------------'\n");
@@ -166,7 +163,7 @@ void addCustomer() {
 		gets(serial.email);
 		fflush(stdin);
 		printf("-------------");
-		printf("\nEnter Period('x'days):");
+		printf("\n Enter Period('x'days):");
 		gets(serial.period);
 		fflush(stdin);
 		printf("----------------------");
@@ -178,7 +175,7 @@ void addCustomer() {
 		fwrite(&serial, sizeof(serial), 1, fp);
 		fflush(stdin);
 		printf("\n\n\t\t\t\t   !!Your Room is successfully booked!!");
-        break;
+		break;
 	}
 	fclose(fp);
 	getch();
@@ -186,3 +183,39 @@ void addCustomer() {
 	showMenu();
 }
 
+void viewRecord() {
+    FILE *f;
+    f = fopen("customerData.txt", "r");
+
+    if(f == NULL) {
+        printf("\n\n\n\n\n\n\n\n\t\t\t\t   !!Sorry, something went wrong!!");
+        sleep(1);
+        system("cls");
+    }
+    system("cls");
+    int i = 1;
+    while(fread(&serial, sizeof(serial), 1, f) ==1) {
+        printf("\n\t\t\t\t\t_-|Customer %d data|-_\n\n",i);
+        printf("\n Room type(AC/NON-AC): %s", serial.room_type);
+		printf("\n----------------------");
+		printf("\n Room number: %s", serial.room_no);
+		printf("\n-------------");
+		printf("\n Name: %s", serial.name);
+		printf("\n------");
+		printf("\n Address: %s", serial.address);
+		printf("\n---------");
+		printf("\n Phone Number: %s", serial.phn_no);
+		printf("\n--------------");
+		printf("\n Email: %s", serial.email);
+		printf("\n-------");
+		printf("\n Period: %s", serial.period);
+		printf("\n--------");
+		printf("\n Arrival date: %s", serial.arrival_date);
+		printf("\n--------------");
+        i++;
+    }
+    fclose(f);
+    getch();
+    system("cls");
+    showMenu();
+}
