@@ -64,7 +64,8 @@ int main() {
 }
 
 void printWelcome() {
-    printf("\t    ----------------------------------------------------------------------------\n");
+    printf("\n\n\n\n\n");
+    printf("\t   .----------------------------------------------------------------------------.\n");
 	printf("\t   |                                                                            |\n");
 	printf("\t   |  WW              WW EEEEEEE LL      CCCCCCC  OOOOOO  MM        MM EEEEEEE  |\n");
 	printf("\t   |   WW            WW  EE      LL      CC      OO    OO MM MM  MM MM EE       |\n");
@@ -72,9 +73,25 @@ void printWelcome() {
 	printf("\t   |     WW WW  WW WW    EE      LL      CC      OO    OO MM        MM EE       |\n");
 	printf("\t   |      WW      WW     EEEEEEE LLLLLLL CCCCCCC  OOOOOO  MM        MM EEEEEEE  |\n");
 	printf("\t   |                                                                            |\n");
-	printf("\t    ----------------------------------------------------------------------------\n");
-	sleep(2);
-    system("cls");
+	printf("\t   '----------------------------------------------------------------------------'\n");
+	sleep(1);
+	system("cls");
+	printf("\n\n\n");
+    printf("\t\t\t\t    .---------------------------.\n");
+	printf("\t\t\t\t    |                           |\n");
+	printf("\t\t\t\t    |      .-------------.      |\n");
+	printf("\t\t\t\t    |      | HOTEL ELITE |      |\n");
+	printf("\t\t\t\t    |      '-------------'      |\n");
+	printf("\t\t\t\t    |                           |\n");
+	printf("\t\t\t\t    |                           |\n");
+	printf("\t\t\t\t    |     Brought To You By     |\n");
+	printf("\t\t\t\t    |                           |\n");
+	printf("\t\t\t\t    |   Akram Hossain Apu Khan  |\n");
+	printf("\t\t\t\t    |        Kazim Hasan        |\n");
+	printf("\t\t\t\t    |        Abrar Faiyaz       |\n");
+	printf("\t\t\t\t    '---------------------------'\n");
+	sleep(3);
+	system("cls");
 }
 
 void checkLogin() {
@@ -127,61 +144,56 @@ void showMenu() {
 }
 
 void addCustomer() {
-	FILE *fp;
+	FILE *f;
 	char test;
-	fp = fopen("customerData.txt","a+");
-	if(fp == NULL) {
+	f = fopen("customerData.txt","a+");
+	if(f == NULL) {
 		printf("\n\n\n\n\n\n\n\n\t\t\t\t     !!Sorry,Something went wrong!!");
 		sleep(1);
-		system("cls");
-		goto jump;
-	}
-	while(1) {
-		printf("\n\t\t\t\t\t.----------------------.");
-		printf("\n\t\t\t\t\t|Enter Customer Details|");
-		printf("\n\t\t\t\t\t'----------------------'\n");
-		printf("\n Enter Room type(AC/NON-AC):");
-		gets(serial.room_type);
-		fflush(stdin);
-		printf("----------------------------");
-		printf("\n Enter Room number:");
-		gets(serial.room_no);
-		fflush(stdin);
-		printf("-------------------");
-		printf("\n Enter Name:");
-		gets(serial.name);
-		fflush(stdin);
-		printf("------------");
-		printf("\n Enter Address:");
-		gets(serial.address);
-		fflush(stdin);
-		printf("---------------");
-		printf("\n Enter Phone Number:");
-		gets(serial.phn_no);
-		fflush(stdin);
-		printf("--------------------");
-		printf("\n Enter Email:");
-		gets(serial.email);
-		fflush(stdin);
-		printf("-------------");
-		printf("\n Enter Period('x'days):");
-		gets(serial.period);
-		fflush(stdin);
-		printf("----------------------");
-		printf("\n Enter Arrival date(dd\\mm\\yyyy):");
-		gets(serial.arrival_date);
-		fflush(stdin);
-		printf("----------------------------------");
+	}else {
+        printf("\n\t\t\t\t\t.----------------------.");
+        printf("\n\t\t\t\t\t|Enter Customer Details|");
+        printf("\n\t\t\t\t\t'----------------------'\n");
+        printf("\n Enter Room type(AC/NON-AC):");
+        gets(serial.room_type);
+        fflush(stdin);
+        printf("----------------------------");
+        printf("\n Enter Room number:");
+        gets(serial.room_no);
+        fflush(stdin);
+        printf("-------------------");
+        printf("\n Enter Name:");
+        gets(serial.name);
+        fflush(stdin);
+        printf("------------");
+        printf("\n Enter Address:");
+        gets(serial.address);
+        fflush(stdin);
+        printf("---------------");
+        printf("\n Enter Phone Number:");
+        gets(serial.phn_no);
+        fflush(stdin);
+        printf("--------------------");
+        printf("\n Enter Email:");
+        gets(serial.email);
+        fflush(stdin);
+        printf("-------------");
+        printf("\n Enter Period('x'days):");
+        gets(serial.period);
+        fflush(stdin);
+        printf("----------------------");
+        printf("\n Enter Arrival date(dd\\mm\\yyyy):");
+        gets(serial.arrival_date);
+        fflush(stdin);
+        printf("----------------------------------");
 
-		fwrite(&serial, sizeof(serial), 1, fp);
-		fflush(stdin);
-		printf("\n\n\t\t\t\t   !!Your Room is successfully booked!!");
-		break;
+        fwrite(&serial, sizeof(serial), 1, f);
+        fflush(stdin);
+        printf("\n\n\t\t\t\t   !!Your Room is successfully booked!!\n");
+        fclose(f);
+        getch();
 	}
-	fclose(fp);
-	getch();
 	system("cls");
-	jump:
 	showMenu();
 }
 
@@ -192,8 +204,6 @@ void viewRecord() {
     if(f == NULL) {
         printf("\n\n\n\n\n\n\n\n\t\t\t\t   !!Sorry, there are no customers!!");
         sleep(1);
-        system("cls");
-        goto jump;
     }else {
         int i = 1;
         while(fread(&serial, sizeof(serial), 1, f) == 1) {
@@ -216,11 +226,10 @@ void viewRecord() {
             printf("\n--------------");
             i++;
         }
+        fclose(f);
+        getch();
     }
-    fclose(f);
-    getch();
     system("cls");
-    jump:
     showMenu();
 }
 
@@ -233,8 +242,6 @@ void searchCustomer() {
     if(f == NULL) {
         printf("\n\n\n\n\n\n\n\n\t\t\t\t   !!Sorry, there are no customers!!");
         sleep(1);
-        system("cls");
-        goto jump;
     }else {
         printf("\n\t\t\t\tEnter room number of the coustomer");
         printf("\n\t\t\t\t----------------------------------\n\t\t\t\t\t       ");
@@ -268,10 +275,9 @@ void searchCustomer() {
             printf("\n\n\n\n\n\n\n\n\t\t\t\t   !!Searched Customer is not found!!");
             printf("\n\n\n\n\t\t\t\t    Enter any key to go back to manu\n\t\t\t\t\t\t   ");
         }
+        fclose(f);
+        getch();
     }
-	getch();
 	system("cls");
-	jump:
 	showMenu();
 }
-
