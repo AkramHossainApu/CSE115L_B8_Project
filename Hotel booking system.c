@@ -8,6 +8,7 @@ void printWelcome();
 void checkLogin();
 void showMenu();
 void addCustomer();
+void deleteCustomer();
 void viewRecord();
 void searchCustomer();
 
@@ -41,7 +42,7 @@ int main() {
                 viewRecord();
                 break;
             case '3':
-
+                deleteCustomer();
                 break;
             case '4':
                 searchCustomer();
@@ -88,9 +89,9 @@ void printWelcome() {
 	printf("\t\t\t\t    |                           |\n");
 	printf("\t\t\t\t    |   Akram Hossain Apu Khan  |\n");
 	printf("\t\t\t\t    |        Kazim Hasan        |\n");
-	printf("\t\t\t\t    |        Abrar Faiyaz       |\n");
+	printf("\t\t\t\t    |        Abrar Faiaz        |\n");
 	printf("\t\t\t\t    '---------------------------'\n");
-	sleep(3);
+	sleep(2);
 	system("cls");
 }
 
@@ -146,14 +147,14 @@ void showMenu() {
 void addCustomer() {
 	FILE *f;
 	char test;
-	f = fopen("customerData.txt","a+");
+	f = fopen("customerData.txt", "a+");
 	if(f == NULL) {
 		printf("\n\n\n\n\n\n\n\n\t\t\t\t     !!Sorry,Something went wrong!!");
 		sleep(1);
 	}else {
-        printf("\n\t\t\t\t\t.----------------------.");
-        printf("\n\t\t\t\t\t|Enter Customer Details|");
-        printf("\n\t\t\t\t\t'----------------------'\n");
+        printf("\n\t\t\t\t\t.------------------------.");
+        printf("\n\t\t\t\t\t|Enter Customer's Details|");
+        printf("\n\t\t\t\t\t'------------------------'\n");
         printf("\n Enter Room type(AC/NON-AC):");
         gets(serial.room_type);
         fflush(stdin);
@@ -233,19 +234,60 @@ void viewRecord() {
     showMenu();
 }
 
+void deleteCustomer() {
+	FILE *f, *t;
+	char roomnumber[20];
+
+	f = fopen("customerData.txt", "r");
+	t = fopen("temp.txt", "a+");
+
+	if(f == NULL) {
+        printf("\n\n\n\n\n\n\n\n\t\t\t\t   !!Sorry, there are no customers!!");
+        sleep(1);
+    }else if(t == NULL) {
+        printf("\n\n\n\n\n\n\n\n\t\t\t\t     !!Sorry,Something went wrong!!");
+		sleep(1);
+    }else {
+        printf("\n\t\t\t\t Enter room number of the customer");
+        printf("\n\t\t\t\t ----------------------------------\n\t\t\t\t\t       ");
+        gets(roomnumber);
+        fflush(stdin);
+
+        while(fread(&serial, sizeof(serial), 1, f)) {
+            if(strcmp(serial.room_no,roomnumber) != 0) {
+                fwrite(&serial, sizeof(serial), 1, t);
+            }
+        }
+        if(strcmp(serial.room_no,roomnumber) == 0) {
+            printf("\n\n\n\n\n\t\t\t     !!The Customer is successfully removed!!");
+        }else {
+            printf("\n\n\n\n\n\t\t\t\t!!There is no customer in the room!!");
+        }
+        fclose(f);
+        fclose(t);
+        remove("customerData.txt");
+        rename("temp.txt","customerData.txt");
+        getch();
+    }
+	system("cls");
+	showMenu();
+
+}
+
 void searchCustomer() {
     FILE *f;
     char roomnumber[10];
     int foundCustomar = 0;
 
-    f = fopen("customerData.txt","r+");
+    f = fopen("customerData.txt", "r+");
     if(f == NULL) {
         printf("\n\n\n\n\n\n\n\n\t\t\t\t   !!Sorry, there are no customers!!");
         sleep(1);
     }else {
-        printf("\n\t\t\t\tEnter room number of the coustomer");
-        printf("\n\t\t\t\t----------------------------------\n\t\t\t\t\t       ");
-        scanf("%s", &roomnumber);
+        printf("\n\t\t\t\t Enter room number of the customer");
+        printf("\n\t\t\t\t ----------------------------------\n\t\t\t\t\t       ");
+        gets(roomnumber);
+        fflush(stdin);
         system("cls");
 
         while(fread(&serial, sizeof(serial), 1, f) == 1) {
