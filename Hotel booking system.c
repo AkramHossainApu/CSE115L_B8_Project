@@ -11,6 +11,7 @@ void addCustomer();
 void deleteCustomer();
 void viewRecord();
 void searchCustomer();
+void editCustomer();
 
 struct customer_details {
     char room_type[20];
@@ -25,6 +26,7 @@ struct customer_details {
 
 int main() {
     int menu;
+
     printWelcome();
 
     checkLogin();
@@ -48,7 +50,7 @@ int main() {
                 searchCustomer();
                 break;
             case '5':
-
+                editCustomer();
                 break;
             case '6':
 
@@ -147,13 +149,13 @@ void showMenu() {
 
 void addCustomer() {
 	FILE *f;
-	char roomtype[20], roomnumber[10];
+	char roomtype[20], roomnumber[10], check;
+	jump:
 	f = fopen("customerData.txt", "a+");
 	if(f == NULL) {
 		printf("\n\n\n\n\n\n\n\n\t\t\t\t     !!Sorry, Something went wrong!!");
 		sleep(1);
 	}else {
-	    jump:
         printf("\n\t\t\t\t\t.------------------------.");
         printf("\n\t\t\t\t\t|Enter Customer's Details|");
         printf("\n\t\t\t\t\t'------------------------'\n");
@@ -168,10 +170,16 @@ void addCustomer() {
         while(fread(&serial, sizeof(serial), 1, f)) {
             if(strcmp(serial.room_no,roomnumber) == 0) {
                 printf("\n\n\n\t\t\t\t    !!Sorry, The room is already booked!!");
-                printf("\n\n\n\t\t\t\t       Enter any key to fill up again");
-                getch();
-                system("cls");
-                goto jump;
+                printf("\n\n\n\t\t\tPress Escape to go back to menu or any other key to fill up again");
+                check = getch();
+                if(check == 27){
+                    fclose(f);
+                    goto end;
+                }else {
+                    system("cls");
+                    fclose(f);
+                    goto jump;
+                }
             }
         }
         strcpy(serial.room_type, roomtype);
@@ -207,6 +215,7 @@ void addCustomer() {
         fclose(f);
         getch();
 	}
+	end:
 	system("cls");
 	showMenu();
 }
@@ -275,9 +284,11 @@ void deleteCustomer() {
             }
         }
         if(isFound == 1) {
-            printf("\n\n\n\n\n\t\t\t     !!The Customer is successfully removed!!");
+            printf("\n\n\n\n\n\t\t\t      !!The Customer is successfully removed!!");
+            printf("\n\n\n\n\t\t\t\t   Press any key to go back to menu\n\t\t\t\t\t\t   ");
         }else {
-            printf("\n\n\n\n\n\t\t\t\t!!There is no customer in the room!!");
+            printf("\n\n\n\n\n\t\t\t\t!!There is no customer in this room!!");
+            printf("\n\n\n\n\t\t\t\t   Press any key to go back to menu\n\t\t\t\t\t\t   ");
         }
         fclose(f);
         fclose(t);
@@ -293,7 +304,7 @@ void deleteCustomer() {
 void searchCustomer() {
     FILE *f;
     char roomnumber[10];
-    int foundCustomar = 0;
+    int isFound = 0;
 
     f = fopen("customerData.txt", "r+");
     if(f == NULL) {
@@ -304,10 +315,10 @@ void searchCustomer() {
         printf("\n\t\t\t\t ----------------------------------\n\t\t\t\t\t       ");
         gets(roomnumber);
         fflush(stdin);
-        system("cls");
 
         while(fread(&serial, sizeof(serial), 1, f) == 1) {
-            if(strcmp(serial.room_no, roomnumber)==0){
+            if(strcmp(serial.room_no, roomnumber) == 0){
+                system("cls");
                 printf("\n\t\t\t\t _-|Searched Customer's details|-_\n");
                 printf("\n Room type: %s", serial.room_type);
                 printf("\n-----------");
@@ -325,17 +336,99 @@ void searchCustomer() {
                 printf("\n--------");
                 printf("\n Arrival date: %s", serial.arrival_date);
                 printf("\n--------------");
-                foundCustomar = 1;
+                isFound = 1;
                 break;
             }
         }
-        if(foundCustomar == 0) {
-            printf("\n\n\n\n\n\n\n\n\t\t\t\t   !!Searched Customer is not found!!");
-            printf("\n\n\n\n\t\t\t\t    Enter any key to go back to menu\n\t\t\t\t\t\t   ");
+        if(isFound == 0) {
+            printf("\n\n\n\n\n\n\t\t\t\t  !!Searched Customer is not found!!");
+            printf("\n\n\n\n\t\t\t\t   Press any key to go back to menu\n\t\t\t\t\t\t   ");
         }
         fclose(f);
         getch();
     }
 	system("cls");
 	showMenu();
+}
+
+void editCustomer() {
+    FILE *f, *t;
+	char roomnumber[10];
+	int isFound = 0;
+
+	f = fopen("customerData.txt", "r");
+	t = fopen("temp.txt", "a+");
+
+	if(f == NULL) {
+        printf("\n\n\n\n\n\n\n\n\t\t\t\t   !!Sorry, there are no customers!!");
+        sleep(1);
+    }else if(t == NULL) {
+        printf("\n\n\n\n\n\n\n\n\t\t\t\t     !!Sorry,Something went wrong!!");
+		sleep(1);
+    }else {
+        printf("\n\t\t\t\t Enter room number of the customer");
+        printf("\n\t\t\t\t ----------------------------------\n\t\t\t\t\t       ");
+        gets(roomnumber);
+        fflush(stdin);
+
+        while(fread(&serial, sizeof(serial), 1, f)) {
+            if(strcmp(serial.room_no,roomnumber) == 0) {
+                isFound = 1;
+            }else {
+                fwrite(&serial, sizeof(serial), 1, t);
+            }
+        }
+        if (isFound == 1) {
+            system("cls");
+            printf("\n\t\t\t\t\t.-------------------------.");
+            printf("\n\t\t\t\t\t|Edited Customer's Details|");
+            printf("\n\t\t\t\t\t'-------------------------'\n");
+            printf("\n Enter Room type(AC/NON-AC):");
+            gets(serial.room_type);
+            fflush(stdin);
+            printf("----------------------------");
+            printf("\n Enter Room number:");
+            gets(serial.room_no);
+            fflush(stdin);
+            printf("-------------------");
+            printf("\n Enter Name:");
+            gets(serial.name);
+            fflush(stdin);
+            printf("------------");
+            printf("\n Enter Address:");
+            gets(serial.address);
+            fflush(stdin);
+            printf("---------------");
+            printf("\n Enter Phone Number:");
+            gets(serial.phn_no);
+            fflush(stdin);
+            printf("--------------------");
+            printf("\n Enter Email:");
+            gets(serial.email);
+            fflush(stdin);
+            printf("-------------");
+            printf("\n Enter Period('x'days):");
+            gets(serial.period);
+            fflush(stdin);
+            printf("----------------------");
+            printf("\n Enter Arrival date(dd\\mm\\yyyy):");
+            gets(serial.arrival_date);
+            fflush(stdin);
+            printf("----------------------------------");
+            fwrite(&serial, sizeof(serial), 1, t);
+            fflush(stdin);
+            printf("\n\n\t\t\t\t !!Customer's data is successfully edited!!");
+            printf("\n\n\t\t\t\t      Press any key to go back to menu\n\t\t\t\t\t\t   ");
+        }else {
+            printf("\n\n\n\n\n\t\t\t\t!!There is no customer in this room!!");
+            printf("\n\n\n\n\t\t\t\t   Press any key to go back to menu\n\t\t\t\t\t\t   ");
+        }
+        fclose(f);
+        fclose(t);
+        remove("customerData.txt");
+        rename("temp.txt","customerData.txt");
+        getch();
+    }
+    system("cls");
+    showMenu();
 }
