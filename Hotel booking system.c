@@ -13,6 +13,7 @@ void deleteCustomer();
 void viewRecord();
 void searchCustomer();
 void editCustomer();
+void exitMenu();
 
 struct customer_details {
     char room_type[20];
@@ -54,7 +55,7 @@ int main() {
                 editCustomer();
                 break;
             case '6':
-
+                exitMenu();
                 break;
             default:
                 printf("\n\n\n\n\n\n\t\t\t\t\t    Incorrect Input");
@@ -462,4 +463,11 @@ void editCustomer() {
     }
     system("cls");
     showMenu();
+}
+
+void exitMenu() {
+    printf("\n\n\n\n\n\n\t\t\t\t\t    !!THANK YOU!!");
+    printf("\n\n\n\n\t\t\t\tWe are happy to have you in our hotel.");
+    printf("\n\n\t\t\t\t\t   Have a nice day!\n\n\n\n\n");
+    exit(0);
 }
