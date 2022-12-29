@@ -8,6 +8,7 @@ void printWelcome();
 void checkLogin();
 void showMenu();
 void addCustomer();
+void printInvoice();
 void deleteCustomer();
 void viewRecord();
 void searchCustomer();
@@ -132,19 +133,19 @@ void checkLogin() {
 
 void showMenu() {
     printf("____________________________________________-|MAIN MENU|-___________________________________________\n\n");
-    printf("\t\t\t\t_-|Please enter your choice for menu|-_\n\n");
-    printf("\n\t\t\t\t\t Enter 1 -> Book a room");
-    printf("\n\t\t\t\t\t------------------------");
-    printf("\n\t\t\t\t     Enter 2 -> View Customers Record");
-    printf("\n\t\t\t\t    ----------------------------------");
-    printf("\n\t\t\t       Enter 3 -> Delete a Customer From the Record");
-    printf("\n\t\t\t      ----------------------------------------------");
-    printf("\n\t\t\t       Enter 4 -> Search a Customer From the Record");
-    printf("\n\t\t\t      ----------------------------------------------");
-    printf("\n\t\t\t\t    Enter 5 -> Edit a Customer's Data");
-    printf("\n\t\t\t\t   -----------------------------------");
-    printf("\n\t\t\t\t\t     Enter 6 -> Exit");
-    printf("\n\t\t\t\t\t    -----------------\n\t\t\t\t\t\t     ");
+    printf("\n\t\t\t\t\t   1 -> Book a room");
+    printf("\n\t\t\t\t\t  ------------------");
+    printf("\n\t\t\t\t      2 -> View Customers Record");
+    printf("\n\t\t\t\t     ----------------------------");
+    printf("\n\t\t\t        3 -> Delete a Customer From the Record");
+    printf("\n\t\t\t       ----------------------------------------");
+    printf("\n\t\t\t        4 -> Search a Customer From the Record");
+    printf("\n\t\t\t       ----------------------------------------");
+    printf("\n\t\t\t\t     5 -> Edit a Customer's Data");
+    printf("\n\t\t\t\t    -----------------------------");
+    printf("\n\t\t\t\t\t      6 -> Exit");
+    printf("\n\t\t\t\t\t     -----------\n\n");
+    printf("\n\t\t\t     _-|Please enter your choice from the menu|-_\n\t\t\t\t\t\t  ");
 }
 
 void addCustomer() {
@@ -214,10 +215,38 @@ void addCustomer() {
         printf("\n\n\t\t\t\t   !!Your Room is successfully booked!!\n");
         fclose(f);
         getch();
+        printInvoice();
 	}
 	end:
 	system("cls");
 	showMenu();
+}
+
+void printInvoice() {
+    FILE *f;
+    f = fopen("customerData.txt", "r");
+
+    while(fread(&serial, sizeof(serial), 1, f)) {
+        system("cls");
+        printf("\t\t\t\t\t     .-------------.\n");
+        printf("\t\t\t\t\t     | HOTEL ELITE |\n");
+        printf(".---------------------------------------------------------------------------------------------------\n|");
+        printf("\t\t\t\t\t\t|Invoice|\n|");
+        printf("\t\t\t\t\t\t'-------'\n|");
+        printf("\n| Room type: %s\n|", serial.room_type);
+        printf("\n| Room number: %s\n|", serial.room_no);
+        printf("\n| Name: %s\n|", serial.name);
+        printf("\n| Address: %s\n|", serial.address);
+        printf("\n| Phone Number: %s\n|", serial.phn_no);
+        printf("\n| Email: %s\n|", serial.email);
+        printf("\n| Period: %s", serial.period);
+        printf("\t\t\t\t*Press any key to print the invoice and go back to menu*\n|");
+        printf("\n| Arrival date: %s\n", serial.arrival_date);
+        printf("'---------------------------------------------------------------------------------------------------");
+    }
+    fclose(f);
+    getch();
+    system("cls");
 }
 
 void viewRecord() {
@@ -229,8 +258,8 @@ void viewRecord() {
         sleep(1);
     }else {
         int i = 1;
-        while(fread(&serial, sizeof(serial), 1, f) == 1) {
-            printf("\n\t\t\t\t\t_-|Customer %d data|-_\n\n", i);
+        while(fread(&serial, sizeof(serial), 1, f)) {
+            printf("\n\t\t\t\t\t _-|Customer %d data|-_\n\n", i);
             printf("\n Room type: %s", serial.room_type);
             printf("\n-----------");
             printf("\n Room number: %s", serial.room_no);
@@ -247,6 +276,7 @@ void viewRecord() {
             printf("\n--------");
             printf("\n Arrival date: %s", serial.arrival_date);
             printf("\n--------------");
+            printf("\n\t\t\t\t   Press any key to go back to menu");
             i++;
         }
         fclose(f);
@@ -316,7 +346,7 @@ void searchCustomer() {
         gets(roomnumber);
         fflush(stdin);
 
-        while(fread(&serial, sizeof(serial), 1, f) == 1) {
+        while(fread(&serial, sizeof(serial), 1, f)) {
             if(strcmp(serial.room_no, roomnumber) == 0){
                 system("cls");
                 printf("\n\t\t\t\t _-|Searched Customer's details|-_\n");
@@ -336,6 +366,7 @@ void searchCustomer() {
                 printf("\n--------");
                 printf("\n Arrival date: %s", serial.arrival_date);
                 printf("\n--------------");
+                printf("\n\t\t\t\t   Press any key to go back to menu");
                 isFound = 1;
                 break;
             }
@@ -418,7 +449,7 @@ void editCustomer() {
             fwrite(&serial, sizeof(serial), 1, t);
             fflush(stdin);
             printf("\n\n\t\t\t\t !!Customer's data is successfully edited!!");
-            printf("\n\n\t\t\t\t      Press any key to go back to menu\n\t\t\t\t\t\t   ");
+            printf("\n\n\t\t\t\t      Press any key to go back to menu");
         }else {
             printf("\n\n\n\n\n\t\t\t\t!!There is no customer in this room!!");
             printf("\n\n\n\n\t\t\t\t   Press any key to go back to menu\n\t\t\t\t\t\t   ");
