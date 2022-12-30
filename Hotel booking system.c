@@ -100,14 +100,24 @@ void printWelcome() {
 }
 
 void checkLogin() {
-    int i;
-    char name[100], pass[50], c;
+    char name[100], pass[50];
     jump:
-    printf("\n\n\n\n");
+    printf("_______________________________________________-|LOGIN|-____________________________________________\n\n");
     printf("\n\t\t\t\t      _____- Enter Username -_____\n\n\t\t\t\t\t\t");
     gets(name);
     printf("\n\t\t\t\t       _____-Enter Password-_____\n\n\t\t\t\t\t\t");
-    gets(pass);
+
+    int i;
+    while(1) {
+        pass[i] = getch();
+        if(pass[i] == 13){
+            break;
+        }else{
+        printf("*");
+        i++;
+        }
+    }
+    pass[i] = '\0';
 
     if(strcmp(name,"user") != 0 && strcmp(pass,"pass") != 0) {
         printf("\n\n\n\t\t\t\t   !!Incorrect Username and Password!!\n\n\n");
@@ -165,89 +175,115 @@ void addCustomer() {
         gets(roomtype);
         fflush(stdin);
         printf("----------------------------");
-        printf("\n Enter Room number:");
-        gets(roomnumber);
-        fflush(stdin);
-        printf("-------------------");
-        while(fread(&serial, sizeof(serial), 1, f)) {
-            if(strcmp(serial.room_no,roomnumber) == 0) {
-                printf("\n\n\n\t\t\t\t    !!Sorry, The room is already booked!!");
-                printf("\n\n\n\t\t\tPress Escape to go back to menu or any other key to fill up again");
-                check = getch();
-                if(check == 27){
-                    fclose(f);
-                    goto end;
-                }else {
-                    system("cls");
-                    fclose(f);
-                    goto jump;
+        if(strcmp("AC", roomtype) == 0 || strcmp("NON-AC", roomtype) == 0) {
+            printf("\n Enter Room number:");
+            gets(roomnumber);
+            fflush(stdin);
+            printf("-------------------");
+            while(fread(&serial, sizeof(serial), 1, f)) {
+                if(strcmp(serial.room_no,roomnumber) == 0) {
+                    printf("\n\n\n\t\t\t\t    !!Sorry, The room is already booked!!");
+                    printf("\n\n\n\t\t\tPress Escape to go back to menu or any other key to fill up again");
+                    check = getch();
+                    if(check == 27){
+                        fclose(f);
+                        goto end;
+                    }else {
+                        system("cls");
+                        fclose(f);
+                        goto jump;
+                    }
                 }
             }
-        }
-        strcpy(serial.room_type, roomtype);
-        strcpy(serial.room_no, roomnumber);
-        printf("\n Enter Name:");
-        gets(serial.name);
-        fflush(stdin);
-        printf("------------");
-        printf("\n Enter Address:");
-        gets(serial.address);
-        fflush(stdin);
-        printf("---------------");
-        printf("\n Enter Phone Number:");
-        gets(serial.phn_no);
-        fflush(stdin);
-        printf("--------------------");
-        printf("\n Enter Email:");
-        gets(serial.email);
-        fflush(stdin);
-        printf("-------------");
-        printf("\n Enter Period('x'days):");
-        gets(serial.period);
-        fflush(stdin);
-        printf("----------------------");
-        printf("\n Enter Arrival date(dd\\mm\\yyyy):");
-        gets(serial.arrival_date);
-        fflush(stdin);
-        printf("----------------------------------");
+            strcpy(serial.room_type, roomtype);
+            strcpy(serial.room_no, roomnumber);
+            printf("\n Enter Name:");
+            gets(serial.name);
+            fflush(stdin);
+            printf("------------");
+            printf("\n Enter Address:");
+            gets(serial.address);
+            fflush(stdin);
+            printf("---------------");
+            printf("\n Enter Phone Number:");
+            gets(serial.phn_no);
+            fflush(stdin);
+            printf("--------------------");
+            printf("\n Enter Email:");
+            gets(serial.email);
+            fflush(stdin);
+            printf("-------------");
+            printf("\n Enter Period('x'days):");
+            gets(serial.period);
+            fflush(stdin);
+            printf("----------------------");
+            printf("\n Enter Arrival date(dd\\mm\\yyyy):");
+            gets(serial.arrival_date);
+            fflush(stdin);
+            printf("----------------------------------");
 
-        fwrite(&serial, sizeof(serial), 1, f);
-        fflush(stdin);
-        printf("\n\n\t\t\t\t   !!Your Room is successfully booked!!\n");
-        fclose(f);
-        getch();
-        printInvoice();
-	}
-	end:
-	system("cls");
-	showMenu();
+            fwrite(&serial, sizeof(serial), 1, f);
+            fflush(stdin);
+            printf("\n\n\t\t\t\t   !!Your Room is successfully booked!!\n");
+            printf("\n\t\t\t\t   Press any key to go show the invoice");
+            fclose(f);
+            getch();
+            printInvoice();
+        }else {
+            printf("\n\n\n\n\n\n\t\t\t\t\t    Incorrect Input");
+            printf("\n\n\n\t\t\t\t\t      Enter again");
+            getch();
+            system("cls");
+            fclose(f);
+            goto jump;
+        }
+        end:
+        system("cls");
+        showMenu();
+    }
 }
 
 void printInvoice() {
     FILE *f;
+    int period, bill, total;
+
     f = fopen("customerData.txt", "r");
 
     while(fread(&serial, sizeof(serial), 1, f)) {
+        period = atoi(serial.period);
+        if (strcmp(serial.room_type, "AC") == 0){
+            bill = 2000;
+            total = bill * period;
+        }else if (strcmp(serial.room_type, "NON-AC") == 0){
+            bill = 1500;
+            total = bill * period;
+        }
         system("cls");
         printf("\t\t\t\t\t     .-------------.\n");
         printf("\t\t\t\t\t     | HOTEL ELITE |\n");
         printf(".---------------------------------------------------------------------------------------------------\n|");
         printf("\t\t\t\t\t\t|Invoice|\n|");
         printf("\t\t\t\t\t\t'-------'\n|");
-        printf("\n| Room type: %s\n|", serial.room_type);
-        printf("\n| Room number: %s\n|", serial.room_no);
-        printf("\n| Name: %s\n|", serial.name);
-        printf("\n| Address: %s\n|", serial.address);
-        printf("\n| Phone Number: %s\n|", serial.phn_no);
-        printf("\n| Email: %s\n|", serial.email);
+        printf("\n|\t\t\t\t\t\t   Name\n|");
+        printf("\t\t\t\t\t\t --------\n|");
+        printf("\t\t\t\t\t\t   %s", serial.name);
+        printf("\n| Room type: %s", serial.room_type);
+        printf("\t\t\t\t\t\t\tRoom number: %s\n|", serial.room_no);
         printf("\n| Period: %s", serial.period);
-        printf("\t\t\t\t*Press any key to print the invoice and go back to menu*\n|");
-        printf("\n| Arrival date: %s\n", serial.arrival_date);
+        printf("\t\t\t\t\t\t\t\tArrival date: %s\n|", serial.arrival_date);
+        printf("\n|\t\t\t\t\t     ----------------\n|");
+        printf("\t\t\t\t\t\tTOTAL BILL\n|");
+        printf("\t\t\t\t\t\t(%d * %d)\n|", period, bill);
+        printf("\t\t\t\t\t       = %d TAKA\n|", total);
+        printf("\t\t\t\t\t     ----------------\n|");
+        printf("\t\t\t\t*Press any key to pay and print the invoice*\n");
         printf("'---------------------------------------------------------------------------------------------------");
     }
     fclose(f);
     getch();
     system("cls");
+    printf("\n\n\n\n\n\n\n\n\n\t\t\t\t!!Thank You for booking a room in our hotel!!");
+    sleep(1);
 }
 
 void viewRecord() {
