@@ -106,18 +106,7 @@ void checkLogin() {
     printf("\n\t\t\t\t      _____- Enter Username -_____\n\n\t\t\t\t\t\t");
     gets(name);
     printf("\n\t\t\t\t       _____-Enter Password-_____\n\n\t\t\t\t\t\t");
-
-    int i;
-    while(1) {
-        pass[i] = getch();
-        if(pass[i] == 13){
-            break;
-        }else{
-        printf("*");
-        i++;
-        }
-    }
-    pass[i] = '\0';
+    gets(pass);
 
     if(strcmp(name,"user") != 0 && strcmp(pass,"pass") != 0) {
         printf("\n\n\n\t\t\t\t   !!Incorrect Username and Password!!\n\n\n");
@@ -264,13 +253,12 @@ void printInvoice() {
         printf(".---------------------------------------------------------------------------------------------------\n|");
         printf("\t\t\t\t\t\t|Invoice|\n|");
         printf("\t\t\t\t\t\t'-------'\n|");
-        printf("\n|\t\t\t\t\t\t   Name\n|");
-        printf("\t\t\t\t\t\t --------\n|");
-        printf("\t\t\t\t\t\t   %s", serial.name);
+        printf("\n|\t\t\t\t\t\t Name: %s \n|", serial.name);
+        printf("\t\t\t\t\t\t-------\n|");
         printf("\n| Room type: %s", serial.room_type);
-        printf("\t\t\t\t\t\t\tRoom number: %s\n|", serial.room_no);
+        printf("\t\t\t\t\t\tRoom number: %s\n|", serial.room_no);
         printf("\n| Period: %s", serial.period);
-        printf("\t\t\t\t\t\t\t\tArrival date: %s\n|", serial.arrival_date);
+        printf("\t\t\t\t\t\t\tArrival date: %s\n|", serial.arrival_date);
         printf("\n|\t\t\t\t\t     ----------------\n|");
         printf("\t\t\t\t\t\tTOTAL BILL\n|");
         printf("\t\t\t\t\t\t(%d * %d)\n|", period, bill);
@@ -313,9 +301,9 @@ void viewRecord() {
             printf("\n--------");
             printf("\n Arrival date: %s", serial.arrival_date);
             printf("\n--------------");
-            printf("\n\t\t\t\t   Press any key to go back to menu");
             i++;
         }
+        printf("\n\t\t\t\t   Press any key to go back to menu");
         fclose(f);
         getch();
     }
